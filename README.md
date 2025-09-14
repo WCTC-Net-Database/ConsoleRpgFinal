@@ -6,29 +6,95 @@ Welcome to your **semester-long RPG project**! This template will grow with you 
 
 This repository is structured to support your growth from basic file-based input/output to a full-blown EF Core RPG with interface-driven architecture.
 
+---
+
 ## 📂 Project Structure
 
 ```
-ConsoleRpgFinalProject/
-├── ConsoleRpg/              # UI and game loop logic
-│   ├── Helpers/             # Console-based UI helpers
-│   ├── Services/            # Console logic helpers
-│   ├── Program.cs           # Entry point
-│   └── Startup.cs           # Dependency injection setup
-│
-├── ConsoleRpgEntities/      # Models, Interfaces, and EF Context
-│   ├── Data/                # GameContext and factory
-│   ├── Models/              # Characters, Items, Rooms, etc.
-│   ├── Services/            # Core game logic services
-│   └── Interfaces/          # Contracts for abilities, players, services, etc.
-│
-├── .github/workflows/       # GitHub Classroom autograding
+ConsoleRpgFinalProject/ 
+├── ConsoleRpg/              # UI and game loop logic 
+│   ├── Helpers/             # Console-based UI helpers 
+│   ├── Services/            # Console logic helpers 
+│   ├── Decorators/          # Decorator pattern implementations 
+│   ├── Program.cs           # Entry point (manual dependency wiring) 
+│   └── Startup.cs           # (For later: Dependency injection setup) 
+│ ├── ConsoleRpgEntities/      # Models, Interfaces, and Data Access 
+│   ├── Data/                # GameContext, PlayerDao, and interfaces 
+│   ├── Models/              # Player and other entity classes 
+│   └── Interfaces/          # Contracts for data access and services 
+│ ├── .github/workflows/       # GitHub Classroom autograding 
 └── README.md                # This file
 ```
 
+---
+
+## 🧩 Core File Responsibilities
+
+### ConsoleRpg Project
+
+- **Program.cs**
+  - The main entry point for the application.
+  - Manually creates and wires up all dependencies (no DI container yet).
+  - Instantiates the game context, output manager, menu manager, player DAO, player service, and wraps the player service with the auto-save decorator.
+  - Passes all dependencies to `GameEngine` and starts the game loop.
+
+- **GameEngine.cs**
+  - Orchestrates the main game flow and user interaction.
+  - Handles the main menu, game loop, and delegates business logic to services.
+  - Does not perform data access or persistence directly.
+
+- **Helpers/MenuManager.cs**
+  - Manages the main menu and user selection logic.
+  - Uses `OutputManager` for all user prompts and menu displays.
+
+- **Helpers/OutputManager.cs**
+  - Handles all console output and input.
+  - Provides methods for logging, displaying tables (like player lists), and prompting for user input.
+  - Uses Spectre.Console for rich, consistent console UI.
+
+- **Services/PlayerService.cs**
+  - Contains business logic for player operations (e.g., leveling up, adding players).
+  - Logs actions using `OutputManager`.
+  - Delegates data access to `IPlayerDao`.
+  - Does not handle persistence directly.
+
+- **Services/OutputService.cs**
+  - Simple wrapper to allow writing output via the `OutputManager`.
+  - Implements `IOutputService` for abstraction.
+
+- **Decorators/AutoSavePlayerServiceDecorator.cs**
+  - Implements the decorator pattern for `IPlayerService`.
+  - Adds automatic persistence (calls `SaveChanges` on the context) after mutating operations.
+  - Wraps the real `PlayerService` to separate business logic from persistence.
+
+---
+
+### ConsoleRpgEntities Project
+
+- **Data/GameContext.cs**
+  - Implements `IContext`.
+  - Handles all data storage and persistence (currently file-based via CSV).
+  - Loads and saves player data, but does not contain business logic.
+
+- **Data/PlayerDao.cs**
+  - Implements `IPlayerDao`.
+  - Provides data access methods for `Player` entities (add, get, list).
+  - Uses `GameContext` as the backend.
+
+- **Models/Player.cs**
+  - Represents the player entity.
+  - Pure data model: contains only properties and a `ToString` for display.
+  - No business logic or persistence code.
+
+- **Data/IPlayerDao.cs, Data/IContext.cs, etc.**
+  - Define interfaces for data access and context operations.
+  - Support SOLID principles and make the codebase extensible and testable.
+
+---
+
 ## 🚀 Getting Started
 
-> You should begin by modifying `Program.cs` to add your own menu options and game logic.
+> Begin by modifying `Program.cs` and `GameEngine.cs` to add your own menu options and game logic.
 > As you implement SOLID principles, add interfaces to `/Interfaces` and apply them in your services and models.
 
 - Start with file-based data
@@ -143,3 +209,4 @@ ConsoleRpgFinalProject/
 - Use interfaces to keep your design open to expansion
 
 Good luck, and build something epic!
+
