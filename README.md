@@ -28,7 +28,7 @@ ConsoleRpgFinalProject/
 
 ## 🚀 Getting Started
 
-> You should begin by modifying `Program.cs` to add your own menu options and game logic.
+> You should begin by modifying `Program.cs` and `GameEngine.cs` to add your own menu options and game logic.
 > As you implement SOLID principles, add interfaces to `/Interfaces` and apply them in your services and models.
 
 - Start with file-based data
