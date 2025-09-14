@@ -1,0 +1,8 @@
+﻿Name,Profession,Level,HitPoints,Equipment
+"John, Brave",Fighter,1,10,sword|shield|potion
+"Bob, Sneaky",Rogue,3,8,dagger|lockpick|cloak
+"Reginald III, Sir",Knight,5,20,sword|armor|horse
+Alice,Wizard,7,12,staff|spellbook|robe
+Mina,Cleric,4,11,mace|holy symbol|bandage
+Grog,Barbarian,2,15,axe|fur cloak
+Lira,Ranger,6,13,bow|arrows|dagger|cloak
